@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/sky.css" id="theme">
+        <link rel="stylesheet" href="css/theme/black.css" id="theme">
 
         <!-- Theme used for syntax highlighting of code -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -44,398 +44,51 @@
                 </section>
 
                 <section>
-                    <p>Sobre mi: <a href="http://monobotsoft.es">Héctor Alvarez</a></p>
-                    <small><p>twitter: <a href="https://twitter.com/monobotblog">@monobotblog</a></p></small>
-                    <small><p>email: <a href="mailto:monobot.soft@gmail.com">monobot.soft@gmail.com</a></p></small>
-                    <small>Backend developer en <a href="https://cabaana.com/" target="_blank">cabaana</a></small>
+                    <p><a href="http://monobotsoft.es">Héctor Alvarez</a></p>
+                    <br>
+                    <p><small>twitter: <a href="https://twitter.com/monobotblog">@monobotblog</a></small></p>
+                    <p><small>email: <a href="mailto:monobot.soft@gmail.com">monobot.soft@gmail.com</a>
+                    Backend developer en <a href="https://cabaana.com/" target="_blank">cabaana</a></small></p>
                 </section>
 
-                <section>
-                    <ul>
+                <section data-background="lib/images/cloud.gif">
                         <h2><small>AWS no necesita presentaciones</small></h2>
                         <div class="fragment">
                             <p>Es el mayor proveedor de servicios cloud actualmente</p>
                             <p>Dispone de un enorme abanico de servicios, y cada año lanza varios.</p>
                             <p>Facturó alrededor de <a href="http://economia.elpais.com/economia/2015/04/23/actualidad/1429808415_482259.html" _target="_blank">6.300 millones de euros en 2015</a></p>
-                    </ul>
-                </section>
-
-                <section>
-                    <ul>
-                        <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/cloud share.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                    </ul>
-                </section>
-
-                <section>
-                    <ul>
-                        <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/aws_ecosystem.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                    </ul>
-                </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <section>
-                    <ul>
-                        <p><small>Con Python puedes crear scripts con solo unas pocas líneas de código, y obviamente mucho mas legible.</small></p>
-                        <p class="fragment"><small>Además tener un script es menos dado a errores que escribirlo a mano, y menos aburrido (y estresante) si me preguntas.</span></small></p>
-                        <p class="fragment"><small>Al ser python tienes acceso a cientos de paquetes que te hacen la vida más fácil (como logging, os, etc...).</span></small></p>
-                        <p class="fragment"><small>El mismo grupo de comandos puede ejecutarse en un grupo de servidores.</small></p>
-                        <p class="fragment"><small>Nada te impide incrustarlo en el cron de tu máquina y hacer la tarea automáticamente.</small></p>
-                        <pre class="fragment"><small><code class="hljs" data-trim contenteditable>
-2 0 * * * ec2-user /var/.envs/cabaana/bin/fab -f /srv/django/cabaana/scripts/fab/db_backup.py dev remote_bu
-                        </code></small></pre>
-                    </ul>
-                </section>
-
-                <section>
-                    <h3>¿Porqué automatizar?</h3>
-                    <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/tarea.jpg" alt="why automate" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                </section>
-
-                <section>
-                    <h3>Así que ...</h3>
-                    <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/automate.jpg" alt="why automate" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                </section>
-
-                <section>
-                    <a href="http://www.fabfile.org/installing.html"><h3>Instalación</h3></a>
-                    <ul>
-                        <div class="fragment">
-                            <p>Con <a href="https://pypi.python.org/pypi/pip">pip</a> directamente, para python3</p>
-                            <pre><code class="hljs" data-trim contenteditable>
-$ pip install fabric3
-                            </code></pre>
                         </div>
-                        <div class="fragment">
-                            <p>Y para python2</p>
-                            <pre><code class="hljs" data-trim contenteditable>
-$ pip install fabric
-                            </code></pre>
-                        </div>
-                        <div class="fragment">
-                            <p>O mediante repositorios (por ejemplo en Ubuntu)</p>
-                            <pre><code class="hljs" data-trim contenteditable>
-$ sudo apt-get install fabric
-                            </code></pre>
-                        </div>
-                    </ul>
                 </section>
 
-                <section data-background="#FFFFB1">
-                    <section>
-                    <h3>Veamos código!!</h3>
-                    <p>En fabric se requiere definir variables de entorno (para configurar el script) y funciones (que son las tareas a ejecutar)</p>
-                    <p class="fragment">Ejemplo sencillo:</p>
-                    </section>
-                    <section>
-                        <p><small>
-                            <pre><code class="hljs" data-trim contenteditable>
-# -*- coding: utf-8 -*-
-from fabric.api import run, env
-from datetime import date
+                <section data-background="lib/images/cloud.gif">
+                    <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/cloud share.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
+                </section>
 
-from os import path
-today = date.today()
-
-env.user = 'user'
-env.hosts = ['9.9.9.9', '99.99.99.99', ]
-env.DB_ENDPOINT = 'eu-west-1.rds.amazonaws.com'
-env.DB_NAME = 'development'
-
-def get_filepath():
-    filename = '{date}.sql'.format(date=today.strftime('%Y%m%d'))
-    return path.join('/', 'home', 'user', 'dbBackUp', '01daily', filename)
-
-def db_backup():
-    run('/usr/pgsql-9.5/bin/pg_dump -U dbuser -h {EP} {NM} > {fp}'
-        .format(
-            EP=env.DB_ENDPOINT,
-            NM=env.DB_NAME,
-            fp=get_filepath(),
-            )
-        )
-                            </li>
-                        </code></pre>
-                        </small></p>
-                    </section>
+                <section data-background="lib/images/cloud.gif">
+                    <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/aws_ecosystem.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
                 </section>
 
                 <section>
                     <section>
-                        <h3>API</h3>
-                        <p><small>hay muchos commandos fabric, para una referencia completa ver <a href="http://docs.fabfile.org/en/1.13/api/contrib/files.html">la documentación</a></small></p>
-                        <p class="fragment"><small>Los más útiles/usados son:</small></p>
+                        <h2>aws cli</h2>
+                        <p>AWS dispone de una herramienta para la línea de comandos que admite (CASI) TODA la funcionalidad disponible en la "consola web"</p>
+                        <p>Así que en breve puedes hacer lo que quieras desde la línea de comando (si sabes como hacerlo)</p>
+                        <p>aws-cli está escrito en python (obviamente)</p>
                     </section>
 
                     <section>
-                        <h4>local</h4>
-                        <p>ejecutar comandos en tu máquina local</p>
-                    </section>
-
-                    <section>
-                        <h4>run</h4>
-                        <p>ejecutar comandos en máquinas remotas</p>
-                        <p><small>* requiere saber en qué máquinas se va a ejecutar el comando.</small></p>
-                        <p><small>* requires clave.</small></p>
-                    </section>
-
-                    <section>
-                        <h4>sudo</h4>
-                        <p>Corre el comando con privilegios de superusuario</p>
-                        <p><small>* requiere clave</small></p>
-                        <p><small>* solo para acceso remoto</small></p>
-                        <p><small>* en local simplemente precedes a fabric con sudo de consola y ya lo tienes</small></p>
-                    </section>
-
-                    <section>
-                        <h4>cd / lcd</h4>
-                        <p>Ejecuta los siguientes comandos dentro de directorios específicos</p>
-                    </section>
-
-                    <section>
-                        <h4>get</h4>
-                        <p>Copia ficheros remotos en local</p>
-                    </section>
-
-                    <section>
-                        <h4>put</h4>
-                        <p>Copia ficheros locales en remoto</p>
-                    </section>
-                </section>
-
-                <section data-background="#FFFFB1">
-                    <section>
-                        <h4>Eres un aburrido, tanto hablar y no vemos código por ningún lado!!!</h4>
-
-                        <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/disculpa.jpg" alt="why automate" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                        <div class="fragment">
-                        <p>Tienen razón, ¿Cómo trabajaríamos con esos comandos?</p>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h4>Veamos local, run y cd en acción</h4>
-                        <p><b>cd</b> se usa dentro de una cláusula <b>with</b>, veamos:</b></p>
-                    </section>
-
-                    <section>
+                        <h2>aws cli (ejemplos)</h2>
+                        <p>obtener ficheros (recursivamente) de un bucket determinado</p>
                         <p>
                             <pre><code class="hljs" data-trim contenteditable>
-def archive(foldername, filename):
-    # veremos una forma mas elegante de hacer ésto mas tarde
-    verb = run
-    if server_name == 'localhost':
-        verb = local
-
-    working_dir = '/home/monobot/sync/{foldername}'.format(
-        foldername=foldername
-    )
-    with cd(working_dir):
-        verb('mv {filename} archived/ -rf')
+aws s3 ls s3://mybucketname --recursive
                             </code></pre>
                         </p>
-                    </section>
 
-                    <section>
-                        <h4>¡¡EH!! ¡¡espera!!, hay argumentos en esa función, ¿Cómo es posible?</h4>
-                        <p>Correcto, podemos pasar argumentos desde la línea de comandos asi:</p>
-                            <pre><code class="hljs" data-trim contenteditable>
-$ fab archive:downloads,myfile.zip
-                            </code></pre>
-                        <p><small>Entiendan que los argumentos se pasan como texto, en el caso de que fueran enteros o de otro tipo tenemos que convertirlos dentro del script.</small></p>
-                    </section>
-                </section>
-
-                <section>
-                    <section>
-                        <h3>env</h3>
-                        <p><small>Es una clase que hereda de dict</small></p>
-                        <p><small><b>env</b> será leido por fabric para comprobar en cada momento su configuración</small></p>
-                        <p><small>Es por tanto donde se definen las variables de entorno del script y configuras ciertos comportamientos específicos.</small></p>
-                        <p><small>hay muchas <b>env variables</b>, como siempre se recomienda leerse la <a href="http://docs.fabfile.org/en/1.13/usage/env.html">lista completa</a></small></p>
-                        <p><small><b>env</b> además nos sirve para poder guardar y acceder a las variables que nosotros necesitemos específicamente (como en el primer ejemplo).</small></p>
-                        <p class="fragment"><small>las variables de entorno de <b>env</b> mas importantes son:</small></p>
-                    </section>
-
-                    <section>
-                        <h4>user / sudo_user</h4>
-                        <ul>
-                        <p>user</p>
-                        <p><small>Donde defines quien va a ejecutar el comando, si no se define será quien esté ejecutando el script de fabric.</small></p>
-                        <div class="fragment">
-                        <p>sudo_user</p>
-                        <p><small>Obviamente el usuario de sudo cuando necesitemos privilegios de superusuario (y necesita existir para poder ser leido por el comando <b>sudo</b>).</small></p>
-                        </div>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h4>host / hosts</h4>
-                        <ul>
-                            <p>host</p>
-                            <p><small>En qué máquinas se va a ejecutar el comando (requerido por tanto por run).</small></p>
-                            <div  class="fragment"><p>hosts</p>
-                            <p><small>Lista de máquinas donde los comandos remotos (con run por ejemplo) se van a ejecutar.</small></p></div>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h4>password / passwords</h4>
-                        <ul>
-                            <p>password</p>
-                            <p><small>Donde se almacena la clave que se va a ejecutar ciertos comandos.</small></p>
-                            <div class="fragment"><p>passwords</p>
-                            <p><small>Si cada máquina remota requiere de una clave específica se deberá de configurar mediante éste diccionario.</small></p>
-                            </div>
-                            <div class="fragment">
-                            <p><small><b>NUNCA</b> guarden las claves en un fichero ".py", en el caso de que se requiera meter claves es mejor guardarlas en el entorno de la máquina y leerlas desde allí.</small></p>
-                            <pre>
-                                <code class="hljs" data-trim contenteditable>
-import os
-env.password = os.environ['MI_CLAVE']
-                                </code>
-                            </pre>
-                            </div>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h4>sudo_password / sudo_passwords</h4>
-                        <ul>
-                            <p>sudo_password</p>
-                            <p><small>Si no existe intentará utilizar la misma de <b>password</b>.</small></p>
-                            <div class="fragment"><p>sudo_passwords</p>
-                            <p><small>Al igual por si necesitas claves específicas por servidor.</small></p></div>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h4>shell</h4>
-                        <ul>
-                            <p><small>para definir el shell que va a ejecutar el comando, por defecto es <b>bash</b>.</small></p>
-                        </ul>
-                    </section>
-
-                    <section data-background="#FFFFB1">
-                        <h4>En un momento determinado puede necesitar cambiar una variable en un momento determinado o para una tarea determinada, ese caso tenemos <b>settings</b></h4>
-                        <p class="fragment"></p>
-                            <pre><code class="hljs" data-trim contenteditable>
-from fabric.api import settings, run
-
-def changing_inside(path):
-    with settings(warn_only=True):
-        return run('ls -la')
-                            </code></pre>
-                        </p>
-                        <p>Por tanto ese comportamiento son afectará lo que ejecutemos dentro del <b>with</b></p>
-                    </section>
-                </section>
-
-                <section data-background="#FFFFB1">
-                    <section>
-                        <h4>Venga ya Héctor, muestranos algo de código!!!</h4>
-                        <img  class="fragment" style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/enfado.jpg" alt="why automate" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                        <div class="fragment">
-                            <h4>Roger! ¿Cómo manejaríamos varias configuraciones?:</h4>
-                            <p><small>Normalmente las configuraciones se setean en tiempo de ejecución, algunas son globales para todo el módulo, otras son específicas para unos comandos determinados como vimos hace un momento, pero algunas pueden ser dependiendo del servidor al que estemos manejando</small></p>
-                            <p><small>eg:</small></p>
-                        </div>
-                    </section>
-
-                    <section>
+                        <p>obtener el listado de servidores</p>
                         <p>
                             <pre><code class="hljs" data-trim contenteditable>
-from fabric.api import env, run, local
-
-env.user = 'user'
-env.foo = 'bar'
-
-def localhost():
-    env.run = local
-    env.DB_ENDPOINT = 'eu-west-1.rds.amazonaws.com'
-    env.DB_NAME = 'development'
-
-def testing():
-    hosts = ['8.8.8.8']
-
-    env.run = run
-    env.DB_ENDPOINT = 'eu-west-2.rds.amazonaws.com'
-    env.DB_NAME = 'testing'
-                            </li>
-                        </code></pre>
-                        </p>
-                    </section>
-
-                    <section>
-                        <p><small>Por tanto podemos ejecutar los mismos comandos en diferentes servidores con configuraciones específicas:</small></p>
-                        <p class="fragment">
-                            <pre><code class="hljs" data-trim contenteditable>
-$ fab -f mi_fabfile.py development db_backup
-                            </li>
-                            </code></pre>
-                            <pre><code class="hljs" data-trim contenteditable>
-$ fab -f mi_fabfile.py testing db_backup
-                            </li>
-                            </code></pre>
-                        </p>
-                    </section>
-
-                </section>
-
-                <section>
-                    <section>
-                        <h3>¿Cómo se ejecuta <b>fabric</b>?</h3>
-                        <p>Fabric va a buscar un fichero llamado <b>fabfile.py</b> o un módulo llamado <b>fabfile</b> en el directorio actual, o puedes especificar el fichero directamente.</p>
-                        <p class="fragment">
-                            <pre><code class="hljs" data-trim contenteditable>
-$ fab development db_backup
-                            </code></pre>
-                            <pre><code class="hljs" data-trim contenteditable>
-$ fab -f mi_fabfile.py development db_backup
-                            </code></pre>
-                        </p>
-                        <p class="fragment">
-                            Normalmente me gusta mas definirlo explícitamente, pero depende de cada uno.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h3>¿Cómo enviar argumentos?</h3>
-                        <p>Ya lo explicamos</p>
-                        <p class="fragment">
-                            <pre><code class="hljs" data-trim contenteditable>
-$ fab big_task:first_arg,second_arg,third=foo,fourth=bar
-                            </code></pre>
-                        </p>
-                        <p>Y también recuerdo que solo llegan como cadena de texto, debemos en su caso convertirlo después.</p>
-                    </section>
-
-                    <section>
-                        <p><small>A propósito nada te impide:</small></p>
-                        <p class="fragment">
-                            <pre><code class="hljs" data-trim contenteditable>
-$ fab -f mi_fabfile.py development db_backup production db_backup
-                            </li>
+aws ec2 describe-instances
                             </code></pre>
                         </p>
                     </section>
@@ -443,102 +96,18 @@ $ fab -f mi_fabfile.py development db_backup production db_backup
 
                 <section>
                     <section>
-                        <h3>tasks (tareas)</h3>
-                        <p>Dentro del fichero de fabric podemos especificar que funciones son o no tareas.</p>
-                        <p>Ésto es algo relativamente nuevo en fabric, para compatibilidad se permite no definir explicitamente, pero se recomienda su uso, eso si una vez defines al menos una tarea el resto no se considera tarea.</p>
-                        <p>Para ello usarmos un decorador.</p>
+                        <h2>S3</h2>
+                        <p>S3 es el webservice para almacenaje y entrega de ficheros estáticos.</p>
+                        <p>Aseguran disponibilidaddel 99,99%</p>
+                        <p>Se almacenan en buckets (baldes) que están disponibles en una localización específica, no es lo mismo tener los ficheros en Irlanda que en Hong Kong</p>
+                        <p>Para el caso de disponibilidad mundial también tienen un CDN que ellos llaman cloudfront</p>
                     </section>
 
-                    <section data-background="#FFFFB1">
-                        <p>
-                            <h4>¡PERO QUE PESADO!, ¿No puedes enseñar algo de código sin tener que pedirlo?</h4>
-                            <pre><code class="hljs" data-trim contenteditable>
-from fabric.decorators import task
-
-@task
-def foo():
-    run('foo')
-
-@task(alias='bar')
-def my_bar():
-    run('bar')
-                            </code></pre>
-                        </p>
-                    </section>
-
-                    <section data-background="#FFFFB1">
-                        <p>
-                            <h4>Las tareas también se pueden definir como clases que hereden de <b>Task</b></h4>
-                            <p>En mi opinión, me parece matar moscas a cañonazos, lo interesante de Fabric es que sea simple y práctico, seguramente hay muchos casos de uso para ésto.</p>
-                            <pre><code class="hljs" data-trim contenteditable>
-from fabric.api import run
-from fabric.tasks import Task
-
-class MyTask(Task):
-    name = "my task"
-    def run(self, environment, domain="whatever.com"):
-        run("foo")
-
-instance = MyTask()
-                            </code></pre>
-                        </p>
-                    </section>
-                </section>
-
-                <section>
                     <section>
-                        <h3>Y por último</h3>
-                        <p>Como hacer un módulo completo</p>
-                        <p>debes de crear una estructura como ésta:</p>
+                        <h2>Usar S3 desde django</h2>
+                        <p>Como es lógico es posible usar S3 desde django, puedes obviamente subir los ficheros a mano, pero lo lógico es que cada vez que un usuario o servicio suba un fichero no lo haga al servidor (piensa en el caso de múltiples servidores) sino que lo haga directamente al bucket</p>
+                        <p>El tutorial mas completo y detallado es <a href="https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/" target="_blank">éste</a></p>
                     </section>
-                    <section>
-                        <p><small>
-                            <pre><code class="hljs" data-trim contenteditable>
-fabfile/
-    ├── __init__.py
-    |   from configuration import inv, development, localhost, production
-    |   from foo import foo_task
-    |   from bar import bar_task
-    |
-    ├── configuration.py
-    |   @task
-    |   def localhost():
-    |       inv.hosts = []
-    |   @task
-    |   def development():
-    |       inv.hosts = []
-    |   @task
-    |   def production():
-    |       inv.hosts = []
-    |
-    ├── foo.py
-    |   @task
-    |   def foo_bar():
-    |
-    └── bar.py
-        @task
-        def foo_bar():
-
-                            </code></pre>
-                        </small></p>
-                    </section>
-                </section>
-
-                <section>
-                        <h3>¡¡Ahora vamos a ver algo de código en vivo!!</h3>
-                        <p><small>Que no se note que tengo una chuletilla (por lo de los nervios y tal)</small></p>
-                </section>
-
-                <section>
-                        <h3>Ejercicio para los créditos</h3>
-                        <p><small>El script debe conectar a un servidor remoto, y guardar el arbol de directorios y ficheros del home ("~/"), en un fichero, el script debe finalmente descargar este fichero a nuestro ordenador local.</small></p>
-                        <p><small>pistas: para el arbol de ficheros y directorios hay un comando de consola llamado "tree", para que la salida del comando se guarde en un fichero determinado puedes poner "tree > myfile.txt".</small></p>
-                        <p><small>Enviar el script por correo a monobot.soft@gmail.com antes de un mes, con nombre completo y DNI</small></p>
-                </section>
-
-                <section>
-                    <h3>¡Gracias!</h3>
-                    <p>La guia completa la tienen disponible en: <a href="https://monobot.github.io/fabric_pyday2017/">https://monobot.github.io/fabric_pyday2017/</a></p>
                 </section>
 
             </div>
