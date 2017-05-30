@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="css/theme/white.css" id="theme">
 
         <!-- Theme used for syntax highlighting of code -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -52,23 +52,26 @@
                 </section>
 
                 <section data-background="lib/images/cloud.gif">
-                        <h2><small>AWS no necesita presentaciones</small></h2>
-                        <div class="fragment">
-                            <p>Es el mayor proveedor de servicios cloud actualmente</p>
-                            <p>Dispone de un enorme abanico de servicios, y cada año lanza varios.</p>
-                            <p>Facturó alrededor de <a href="http://economia.elpais.com/economia/2015/04/23/actualidad/1429808415_482259.html" _target="_blank">6.300 millones de euros en 2015</a></p>
-                        </div>
+                    <section>
+                            <h2><small>AWS no necesita presentaciones</small></h2>
+                            <div class="fragment">
+                                <p>Es el mayor proveedor de servicios cloud actualmente</p>
+                                <p>Dispone de un enorme abanico de servicios, y cada año lanza varios.</p>
+                                <p>Facturó alrededor de <a href="http://economia.elpais.com/economia/2015/04/23/actualidad/1429808415_482259.html" _target="_blank">6.300 millones de euros en 2015</a></p>
+                            </div>
+                    </section>
+
+                    <section>
+                        <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/cloud share.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
+                    </section>
+
+                    <section>
+                        <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/aws_ecosystem.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
+                    </section>
+
                 </section>
 
-                <section data-background="lib/images/cloud.gif">
-                    <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/cloud share.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                </section>
-
-                <section data-background="lib/images/cloud.gif">
-                    <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/aws_ecosystem.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-                </section>
-
-                <section>
+                <section data-background="lib/images/aws-cli-logo.jpg">
                     <section>
                         <h2>aws cli</h2>
                         <p>AWS dispone de una herramienta para la línea de comandos que admite (CASI) TODA la funcionalidad disponible en la "consola web"</p>
@@ -94,7 +97,7 @@ aws ec2 describe-instances
                     </section>
                 </section>
 
-                <section>
+                <section data-background="lib/images/AmazonS3.png">
                     <section>
                         <h2>S3</h2>
                         <p>S3 es el webservice para almacenaje y entrega de ficheros estáticos.</p>
@@ -134,7 +137,7 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
                         <p><small>Para una descripción paso a paso y completa ver <a href="https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/" target="_blank">el tutorial</a></small></p>
                     </section>
                 </section>
-                <section>
+                <section data-background="lib/images/Amazon-SQS.png">
                     <section>
                         <h2>SQS</h2>
                         <p>Es el servicio de colas, asegura solo y al menos una entrega de la tarea, si devuelve error se volverá a enviar</p>
@@ -215,6 +218,50 @@ manage.py sqjobs sqs worker QUEUE_NAME
                             </code></pre>
                         </p>
                     </section>
+                </section>
+
+                <section data-background="lib/images/ec2.png">
+                    <section>
+                        <h1>EC2 VPC ELB y ROUTE53</h1>
+                        <p>Son diferentes servicios pero están estrechamente relacionados</p>
+                    </section>
+
+                    <section>
+                        <h2>EC2</h2>
+                        <p>Los los servidores a los cuales puedes acceder mediante ssh</p>
+                        <p>Existe un abanico muy amplio de servidores, generalistas, cpu, memoria, ancho de banda, etc...</p>
+                        <p>Los servidores deben tener asociado al menos una seccion de disco virtual (normalmente ssd)</p>
+                    </section>
+
+                    <section>
+                        <h2>Regiones y zonas de disponibilidad</h2>
+                        <p>La nube de amazon se divide en regiones (uswest, useast, euwest, eueast, etc...) y cada region se divide al menos en 3 zonas de disponibilidad (availability zones)</p>
+                        <p>debes tener claro donde localizas el servidor para que esté lo mas cerca posible de tu clientes</p>
+                        <p>salvo contadas excepciones los servicios de amazon están localizados</p>
+                    </section>
+
+                    <section>
+                        <h2>VPC (Virtual Private Cloud)</h2>
+                        <p>Necesita gateway (un servidor ec2 dedicado al enrutado), la red virtual da un nivel de aislamiento necesario cuando tratas mas de una máquina para que el acceso interno sea fácil y posible</p>
+                        <p>Es importante hablar ahora de <b>AIM</b>, es el gestor de roles de amazon, a los diferentes servidores hay que darle acceso a los diferentes roles para así poder tener acceso a los servicios, es muy importante y es necesario hacerlo ANTES de la provisión de los mismos.</p>
+                    </section>
+
+                    <section>
+                        <h2>ELB (Elastic Load Balancer)</h2>
+                        <p>Se encarga de balancear la carga entre los diferentes servidores, de tal forma que éstos estén mas o menos al mismo nivel de trabajo.</p>
+                        <p>El ELB se puede asignar a un grow group, es decir una configuración de EC2 que dependiendo de una serie de requisitos establecidos por nosotros aumenta automáticamente el número de servidores.</p>
+                    </section>
+
+                    <section>
+                        <h2>ROUTE53</h2>
+                        <p>El servicio de enrutado de amazon</p>
+                        <p>Lo fantástico que tiene es que permite enrutar a una máquina específica o a un ELB, podemos hacer cosas como el 50% de la carga la pones aquí y el resto allá, o que la carga la reparta al servidor mas cercano, o por paises, etc...</p>
+                    </section>
+
+                    <section>
+                        <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/VPClayout.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
+                    </section>
+
                 </section>
 
             </div>
