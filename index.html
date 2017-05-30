@@ -262,6 +262,83 @@ manage.py sqjobs sqs worker QUEUE_NAME
                         <img style="vertical-align: middle;border:none;box-shadow:none;background:none" src="lib/images/VPClayout.png" alt="cloud share 2016" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
                     </section>
 
+                    <section>
+                        <p>Como pueden ver es un lio poder interactuar con los diferentes servidores y además a priori no sabemos las ips o cuantos servidores hay en un grow group por ejemplo, por ello nos tenemos que valer algun truco</p>
+                    </section>
+
+                    <section>
+                        <p><small>
+                            <pre><code class="hljs" data-trim contenteditable>
+def deploy():
+    print(('this command will pull {red}{servername}\'s{black} '
+        'current branch to the latest version and restart the services ...'
+        ).format(
+            red=ShellFormat.WARNING,
+            servername=env.host_type.upper(),
+            black=ShellFormat.ENDC,
+            )
+        )
+    resp = raw_input('Type the server\'s name to confirm: ')
+
+    if resp == env.host_type:
+        env.migrate = True
+
+        websocket_host = env.websocket_host != {'hosts': [], 'user': ''}
+        if websocket_host:
+            print 'WEBSOCKET SERVER: migrate the database and deploy'
+            execute(real_deploy,
+                    env.websocket_host['user'],
+                    hosts=env.websocket_host['hosts'],
+                    )
+
+            print 'WEBSERVERS: just deploy'
+            env.migrate = False
+            execute(real_deploy,
+                    env.webserver_hosts['user'],
+                    hosts=env.webserver_hosts['hosts'],
+                    )
+        else:
+            print 'WEBSERVERS: migrate the database and deploy'
+            execute(real_deploy,
+                    env.webserver_hosts['user'],
+                    hosts=env.webserver_hosts['hosts'],
+                    )
+    else:
+        print('... exiting')
+                            </code></pre>
+                        </small></p>
+
+                    </section>
+
+                    <section>
+                        <p><small>
+                            <pre><code class="hljs" data-trim contenteditable>
+def real_deploy(user):
+    env.user = user
+    with cd(env.cabaana_dir):
+        run('git stash')
+        run('git pull')
+        if env.migrate:
+            run(
+                ('{python} manage.py migrate_schemas '
+                    '--settings=cabaana.settings.{host_type}'
+                    ).format(
+                        python=env.python_int,
+                        host_type=env.host_type
+                        )
+                )
+
+        control_service = 'supervisorctl'
+        if env.host_type in ['development', 'gold']:
+            control_service = 'circusctl'
+
+        run('sudo {} reload'.format(control_service))
+        sleep(3)
+        run('sudo {} status'.format(control_service))
+                            </code></pre>
+                        </small></p>
+
+                    </section>
                 </section>
 
             </div>
