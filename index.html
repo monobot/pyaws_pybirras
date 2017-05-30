@@ -98,15 +98,122 @@ aws ec2 describe-instances
                     <section>
                         <h2>S3</h2>
                         <p>S3 es el webservice para almacenaje y entrega de ficheros estáticos.</p>
-                        <p>Aseguran disponibilidaddel 99,99%</p>
-                        <p>Se almacenan en buckets (baldes) que están disponibles en una localización específica, no es lo mismo tener los ficheros en Irlanda que en Hong Kong</p>
-                        <p>Para el caso de disponibilidad mundial también tienen un CDN que ellos llaman cloudfront</p>
+                        <p><small>Aseguran disponibilidaddel 99,99%</small></p>
+                        <p><small>Se almacenan en buckets (baldes) que están disponibles en una localización específica, no es lo mismo tener los ficheros en Irlanda que en Hong Kong</small></p>
+                        <p><small>Para el caso de disponibilidad mundial también tienen un CDN que ellos llaman <b>cloudfront</b></small></p>
+                        <p><small>También tienen un servicio para ficheros de lento (muy muy lento) acceso <b>glacier</b></small></p>
                     </section>
 
                     <section>
                         <h2>Usar S3 desde django</h2>
-                        <p>Como es lógico es posible usar S3 desde django, puedes obviamente subir los ficheros a mano, pero lo lógico es que cada vez que un usuario o servicio suba un fichero no lo haga al servidor (piensa en el caso de múltiples servidores) sino que lo haga directamente al bucket</p>
-                        <p>El tutorial mas completo y detallado es <a href="https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/" target="_blank">éste</a></p>
+                        <p>Como es lógico es posible usar S3 desde django, puedes obviamente hacerlo tu a mano, con cada subida que haya una señal que lo haga por ti</p>
+                        <p>Pero lo lógico es que cada vez que un usuario o servicio suba un fichero no lo haga al servidor (piensa en el caso de múltiples servidores) sino que lo haga directamente al bucket</p>
+                    </section>
+
+                    <section>
+                        <p><small>Configurar como se suben lo ficheros media</small></p>
+                        <p>
+                            <pre><code class="hljs" data-trim contenteditable>
+class MediaStorage(S3BotoStorage):
+    location = settings.MEDIAFILES_LOCATION
+                            </code></pre>
+                        </p>
+                        <p><small>Configurar el settings</small></p>
+                        <p>
+                            <pre><code class="hljs" data-trim contenteditable>
+AWS_STORAGE_BUCKET_NAME = 'BUCKET_NAME'
+AWS_ACCESS_KEY_ID = 'xxxxxxxxxxxxxxxxxxxx'
+AWS_SECRET_ACCESS_KEY = 'yyyyyyyyyyyyyyyyyyyyyyy'
+
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+                            </code></pre>
+                        </p>
+                        <p><small>Lo mismo se puede (y debe) hacer con los estáticos ¡para que tu servidor no sirva ningún fichero!</small></p>
+                        <p><small>Para una descripción paso a paso y completa ver <a href="https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/" target="_blank">el tutorial</a></small></p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>SQS</h2>
+                        <p>Es el servicio de colas, asegura solo y al menos una entrega de la tarea, si devuelve error se volverá a enviar</p>
+                        <p>Para sqs amazon puedes usar el boto de amazon, pero tendrías que hacertelo tu a mano, yo recomiendo usar <a href="https://github.com/igalarzab/sqjobs">sqjobs</a></p>
+                        <p>No hay tiempo de explicarlo entero, básicamente configuras una serie de tareas, y tienes un broker que se encarga de encolar las tareas y worker/s que se encarga/n de ejecutarlas a medida que llegan.</p>
+                    </section>
+
+                    <section>
+                        <p>definir el broker</p>
+                        <p>
+                            <pre><code class="hljs" data-trim contenteditable>
+def sqs_broker():
+    return create_sqs_broker(
+        access_key=settings.SQJOBS_SQS_ACCESS_KEY,
+        secret_key=settings.SQJOBS_SQS_SECRET_KEY,
+        region_name='eu-west-1'
+    )
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <p>el mixin de las tareas</p>
+                        <p>
+                            <pre><code class="hljs" data-trim contenteditable>
+class LogJobMixin(Job):
+    default_queue_name = settings.SQS_QUEUE
+
+    def pre_run(self, *args, **kwargs):
+        # que hacer antes de ejecutarse
+
+    def post_run(self, *args, **kwargs):
+        # que hacer después de ejecutarse
+
+    def on_failure(self):
+        # que hacer si falla
+
+    def on_retry(self):
+        # que hacer al reintentar
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <p>definir una tarea:</p>
+                        <p>
+                            <pre><code class="hljs" data-trim contenteditable>
+class ChangePasswordEmail(LogJobMixin):
+    name = 'ChangePasswordEmail'
+
+    def run(self, *args, **kwargs):
+        changePasswordEmail(*args, **kwargs)
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <p>encolar una tarea:</p>
+                        <p>
+                            <pre><code class="hljs" data-trim contenteditable>
+from sqs_cabaana.brokers import sqs_broker
+from sqs_cabaana import ChangePasswordEmail
+
+broker = sqs_broker()
+
+broker.add_job(
+    ChangePasswordEmail,
+    emp.user.id,
+    schema_name=schema_name,
+)
+                            </code></pre>
+                        </p>
+                        <p>Los argumentos que se envían a sqs deben ser serializables directamente, no puedes por tanto enviar modelos de django</p>
+                    </section>
+                    <section>
+                        <p>Ya solo nos queda ver como corren los workers</p>
+                        <p>convenientemente tenemos una tarea de django ya configurada</p>
+                        <p>
+                            <pre><code class="hljs" data-trim contenteditable>
+manage.py sqjobs sqs worker QUEUE_NAME
+                            </code></pre>
+                        </p>
                     </section>
                 </section>
 
