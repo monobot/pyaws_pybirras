@@ -195,8 +195,8 @@ class ChangePasswordEmail(LogJobMixin):
                         <p>encolar una tarea:</p>
                         <p>
                             <pre><code class="hljs" data-trim contenteditable>
-from sqs_cabaana.brokers import sqs_broker
-from sqs_cabaana import ChangePasswordEmail
+from mysqs.brokers import sqs_broker
+from mysqs import ChangePasswordEmail
 
 broker = sqs_broker()
 
@@ -222,7 +222,7 @@ manage.py sqjobs sqs worker QUEUE_NAME
 
                 <section data-background="lib/images/ec2.png">
                     <section>
-                        <h1>EC2 VPC ELB y ROUTE53</h1>
+                        <h1>EC2, VPC, ELB y ROUTE53</h1>
                         <p>Son diferentes servicios pero están estrechamente relacionados</p>
                     </section>
 
@@ -265,6 +265,61 @@ manage.py sqjobs sqs worker QUEUE_NAME
                     <section>
                         <p>Como pueden ver es un lio poder interactuar con los diferentes servidores y además a priori no sabemos las ips o cuantos servidores hay en un grow group por ejemplo, por ello nos tenemos que valer algun truco</p>
                     </section>
+
+                    <section>
+                        <p><small>
+                            <pre><code class="hljs" data-trim contenteditable>
+def describe_instances(stage):
+    aws_instances = local('aws ec2 describe-instances', capture=True)
+    aws_dict = json.loads(aws_instances.stdout)
+    # print aws_dict
+    webserver_stage = {'hosts': [], 'user': ''}
+    websocket_stage = {'hosts': [], 'user': ''}
+    for res in aws_dict['Reservations']:
+        for inst in res['Instances']:
+            same_stage = False
+            is_webserver = False
+            is_websocket = False
+            inst_ip = inst['PublicIpAddress']
+
+            for tag in inst['Tags']:
+                if tag['Key'] == 'Stage':
+                    same_stage = (
+                        tag['Key'] == 'Stage' and tag['Value'] == stage
+                    )
+                elif tag['Key'] == 'Use':
+                    is_webserver = (
+                        tag['Key'] == 'Use' and tag['Value'] == 'Webserver'
+                    )
+                    is_websocket = (
+                        tag['Key'] == 'Use' and tag['Value'] == 'Websockets'
+                    )
+                elif tag['Key'] == 'username':
+                    username = tag['Value']
+
+            if same_stage:
+                if is_webserver:
+                    webserver_stage['hosts'].append(str(inst_ip))
+                    webserver_stage['user'] = username
+                elif is_websocket:
+                    websocket_stage['hosts'].append(str(inst_ip))
+                    websocket_stage['user'] = username
+
+    return webserver_stage, websocket_stage
+
+
+def dev():
+    env.host_type = 'development'
+    env.webserver_hosts, env.websocket_host = describe_instances(env.host_type)
+
+    env.key_filename = get_pempath('mykey.pem')
+    env.DB_ENDPOINT = 'yourendpoint.rds.amazonaws.com'
+    env.DB_NAME = 'dev'
+                            </code></pre>
+                        </small></p>
+
+                    </section>
+
 
                     <section>
                         <p><small>
@@ -315,13 +370,13 @@ def deploy():
                             <pre><code class="hljs" data-trim contenteditable>
 def real_deploy(user):
     env.user = user
-    with cd(env.cabaana_dir):
+    with cd(env.mydir):
         run('git stash')
         run('git pull')
         if env.migrate:
             run(
                 ('{python} manage.py migrate_schemas '
-                    '--settings=cabaana.settings.{host_type}'
+                    '--settings=special.settings.{host_type}'
                     ).format(
                         python=env.python_int,
                         host_type=env.host_type
